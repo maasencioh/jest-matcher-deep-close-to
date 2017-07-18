@@ -36,7 +36,7 @@ export function toBeDeepCloseTo(received, expected, decimals) {
  */
 function recursiveCheck(actual, expected, decimals) {
     if (typeof actual === 'number') {
-        if ((Math.abs(actual - expected) <= 10 ** -decimals)) {
+        if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
             return false;
         } else {
             return {
