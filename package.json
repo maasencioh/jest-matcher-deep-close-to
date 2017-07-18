@@ -1,0 +1,43 @@
+{
+  "name": "jest-matcher-deep-close-to",
+  "version": "0.0.0",
+  "description": "Extend jest to assert arrays with approximate values",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "eslint": "eslint src",
+    "eslint-fix": "npm run eslint -- --fix",
+    "prepublish": "rollup -c",
+    "test": "run-s testonly eslint",
+    "test-travis": "eslint src && jest --coverage && codecov",
+    "testonly": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maasencioh/jest-matcher-deep-close-to.git"
+  },
+  "keywords": [],
+  "author": "Miguel Angel Asencio Hurtado",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maasencioh/jest-matcher-deep-close-to/issues"
+  },
+  "homepage": "https://github.com/maasencioh/jest-matcher-deep-close-to#readme",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "codecov": "^2.2.0",
+    "eslint": "^4.2.0",
+    "eslint-config-cheminfo": "^1.8.0",
+    "eslint-plugin-no-only-tests": "^2.0.0",
+    "jest": "^20.0.4",
+    "npm-run-all": "^4.0.2",
+    "rollup": "^0.45.2"
+  }
+}
