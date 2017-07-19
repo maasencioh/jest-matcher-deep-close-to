@@ -34,4 +34,12 @@ describe('fails', () => {
         expect([[43]]).not.toBeDeepCloseTo([[42]], 3);
         expect([[42.03]]).not.toBeDeepCloseTo([[42.0004]], 3);
     });
+
+    it('array length', () => {
+        expect([[43]]).not.toBeDeepCloseTo([[43, 43]], 3);
+    });
+
+    it('data type', () => {
+        expect([[43]]).not.toBeDeepCloseTo([['43']], 3);
+    });
 });
