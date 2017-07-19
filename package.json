@@ -1,6 +1,6 @@
 {
   "name": "jest-matcher-deep-close-to",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extend jest to assert arrays with approximate values",
   "main": "lib/index.js",
   "module": "src/index.js",
