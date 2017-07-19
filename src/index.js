@@ -7,6 +7,7 @@
  */
 export function toBeDeepCloseTo(received, expected, decimals) {
     var error = recursiveCheck(received, expected, decimals);
+    /* istanbul ignore next */
     if (error) {
         return {
             message: () => this.utils.matcherHint('.toBeDeepCloseTo') + '\n\n' +
@@ -35,7 +36,7 @@ export function toBeDeepCloseTo(received, expected, decimals) {
  * @return {boolean|{reason, expected, received}}
  */
 function recursiveCheck(actual, expected, decimals) {
-    if (typeof actual === 'number') {
+    if (typeof actual === 'number' && typeof expected === 'number') {
         if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
             return false;
         } else {
@@ -45,7 +46,7 @@ function recursiveCheck(actual, expected, decimals) {
                 received: actual
             };
         }
-    } else if (Array.isArray(actual)) {
+    } else if (Array.isArray(actual) && Array.isArray(expected)) {
         if (actual.length !== expected.length) {
             return {
                 reason: 'The arrays length does not match',
@@ -62,8 +63,8 @@ function recursiveCheck(actual, expected, decimals) {
     } else {
         // error for all other types
         return {
-            reason: 'The current data type is not supported',
-            expected: 'number or Array',
+            reason: 'The current data type is not supported or they do not match',
+            expected: typeof expected,
             received: typeof actual
         };
     }
