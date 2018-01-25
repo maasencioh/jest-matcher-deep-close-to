@@ -54,10 +54,26 @@ function recursiveCheck(actual, expected, decimals) {
                 received: actual.length
             };
         }
-
         for (var i = 0; i < actual.length; i++) {
             var error = recursiveCheck(actual[i], expected[i], decimals);
             if (error) return error;
+        }
+        return false;
+    } else if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
+        var actualKeys = Object.keys(actual).sort();
+        var expectedKeys = Object.keys(expected).sort();
+        if (!(actualKeys.length === expectedKeys.length && actualKeys.every(function (e, i) {
+            return e === expectedKeys[i];
+        }))) {
+            return {
+                reason: 'The objects do not have similar keys',
+                expected: expectedKeys,
+                received: actualKeys,
+            };
+        }
+        for (const prop in expected) {
+            var properror = recursiveCheck(actual[prop], expected[prop], decimals);
+            if (properror) return properror;
         }
         return false;
     } else {

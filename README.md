@@ -5,7 +5,7 @@
   [![Test coverage][codecov-image]][codecov-url]
   [![npm download][download-image]][download-url]
 
-Extend jest to assert arrays with approximate values.
+Extend jest to assert arrays and objects with approximate values.
 
 ## Installation
 
