@@ -3,7 +3,7 @@
  * @param {number|Array} received
  * @param {number|Array} expected
  * @param {number} decimals
- * @returns {{message: (function(): string), pass: boolean}}
+ * @return {{message: (function(): string), pass: boolean}}
  */
 export function toBeDeepCloseTo(received, expected, decimals) {
     var error = recursiveCheck(received, expected, decimals);
