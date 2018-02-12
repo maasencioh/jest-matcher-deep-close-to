@@ -1,4 +1,5 @@
 import { toBeDeepCloseTo } from '..';
+
 expect.extend({ toBeDeepCloseTo });
 
 describe('toBeDeepCloseTo', () => {
