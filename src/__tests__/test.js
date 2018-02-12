@@ -22,6 +22,10 @@ describe('toBeDeepCloseTo', () => {
     expect({ x: { a: 1.4999 }, y: 3.00001 }).toBeDeepCloseTo({ x: { a: 1.5 }, y: 3 }, 3);
   });
 
+  it('object with NaN', () => {
+    expect({ x: 1.4999, y: NaN }).toBeDeepCloseTo({ x: 1.5, y: NaN }, 3);
+    expect({ x: 1.4999, y: 3 }).not.toBeDeepCloseTo({ x: 1.5, y: NaN }, 3);
+  });
 });
 
 
@@ -62,5 +66,4 @@ describe('fails', () => {
   it('object with arrays with mismatched lengths', () => {
     expect({ x: [1.48], y: [3.01, 3.02] }).not.toBeDeepCloseTo({ x: 1.5, y: 3 }, 3);
   });
-
 });

@@ -11,19 +11,19 @@ export function toBeDeepCloseTo(received, expected, decimals) {
   if (error) {
     return {
       message: () => `${this.utils.matcherHint('.toBeDeepCloseTo')}\n\n` +
-                `${error.reason}:\n` +
-                `  ${this.utils.printExpected(error.expected)}\n` +
-                'Received:\n' +
-                `  ${this.utils.printReceived(error.received)}`,
+        `${error.reason}:\n` +
+        `  ${this.utils.printExpected(error.expected)}\n` +
+        'Received:\n' +
+        `  ${this.utils.printReceived(error.received)}`,
       pass: false
     };
   } else {
     return {
       message: () => `${this.utils.matcherHint('.not.toBeDeepCloseTo')}\n\n` +
-                'The two objects are deeply equal:\n' +
-                `  ${this.utils.printExpected(expected)}\n` +
-                'Received:\n' +
-                `  ${this.utils.printReceived(received)}`,
+        'The two objects are deeply equal:\n' +
+        `  ${this.utils.printExpected(expected)}\n` +
+        'Received:\n' +
+        `  ${this.utils.printReceived(received)}`,
       pass: true
     };
   }
@@ -37,7 +37,9 @@ export function toBeDeepCloseTo(received, expected, decimals) {
  */
 function recursiveCheck(actual, expected, decimals) {
   if (typeof actual === 'number' && typeof expected === 'number') {
-    if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
+    if (isNaN(actual)) {
+      return !isNaN(expected);
+    } else if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
       return false;
     } else {
       return {
