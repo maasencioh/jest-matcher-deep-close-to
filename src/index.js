@@ -123,7 +123,7 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
   } else {
     // error for all other types
     return {
-      reason: 'The current data type is not supported or they do not match',
+      reason: 'The current data types are not supported',
       expected: typeof expected,
       received: typeof actual
     };
