@@ -112,8 +112,8 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     var actualKeys = Object.keys(actual).sort();
     var expectedKeys = Object.keys(expected).sort();
     var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
-    if (!sameLength || expectedKeys.some(function (e, i) {
-      return e !== actualKeys[i];
+    if (!sameLength || expectedKeys.some(function (e) {
+      return !Object.prototype.hasOwnProperty.call(actual, e);
     })) {
       return {
         reason: 'The objects do not have similar keys',
