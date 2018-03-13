@@ -76,20 +76,12 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
       received: typeof actual
     };
   }
+  
+  if( typeof actual === 'number' ) {
+    return cmpNumbers( actual, expected, decimals );
+  }
 
-  if (typeof actual === 'number' && typeof expected === 'number') {
-    if (isNaN(actual)) {
-      return !isNaN(expected);
-    } else if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
-      return false;
-    } else {
-      return {
-        reason: `Expected value to be (using ${decimals} decimals)`,
-        expected: expected,
-        received: actual
-      };
-    }
-  } else if (Array.isArray(actual) && Array.isArray(expected)) {
+  if (Array.isArray(actual) && Array.isArray(expected)) {
     if (actual.length !== expected.length) {
       return {
         reason: 'The arrays length does not match',
@@ -128,4 +120,18 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
       received: typeof actual
     };
   }
+}
+
+function cmpNumbers( actual, expected,  decimals ) {
+  if (isNaN(actual)) return !isNaN(expected);
+
+  if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
+    return false;
+  }
+
+  return {
+    reason: `Expected value to be (using ${decimals} decimals)`,
+    expected: expected,
+    received: actual
+  };
 }
