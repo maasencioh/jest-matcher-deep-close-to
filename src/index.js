@@ -68,25 +68,24 @@ export function toMatchCloseTo(received, expected, decimals) {
  * @return {boolean|{reason, expected, received}}
  */
 function recursiveCheck(actual, expected, decimals, strict = true) {
-
-  if ( typeof actual !== typeof expected ) {
+  if (typeof actual !== typeof expected) {
     return {
       reason: 'The data types do not match',
       expected: typeof expected,
       received: typeof actual
     };
   }
-  
-  if( typeof actual === 'number' ) {
-    return cmpNumbers( actual, expected, decimals );
+
+  if (typeof actual === 'number') {
+    return cmpNumbers(actual, expected, decimals);
   }
 
-  if( [actual,expected].every( Array.isArray ) ) {
-    return cmpArrays( actual, expected, decimals, strict );
+  if ([actual, expected].every(Array.isArray)) {
+    return cmpArrays(actual, expected, decimals, strict);
   }
 
-  if( typeof actual === 'object' ) {
-    return cmpObjects( actual, expected, decimals, strict );
+  if (typeof actual === 'object') {
+    return cmpObjects(actual, expected, decimals, strict);
   }
 
   // error for all other types
@@ -97,7 +96,7 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
   };
 }
 
-function cmpNumbers( actual, expected,  decimals ) {
+function cmpNumbers(actual, expected, decimals) {
   if (isNaN(actual)) return !isNaN(expected);
 
   if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
@@ -111,42 +110,42 @@ function cmpNumbers( actual, expected,  decimals ) {
   };
 }
 
-function cmpArrays( actual, expected, decimals, strict ) {
-    if (actual.length !== expected.length) {
-      return {
-        reason: 'The arrays length does not match',
-        expected: expected.length,
-        received: actual.length
-      };
-    }
+function cmpArrays(actual, expected, decimals, strict) {
+  if (actual.length !== expected.length) {
+    return {
+      reason: 'The arrays length does not match',
+      expected: expected.length,
+      received: actual.length
+    };
+  }
 
-    for (var i = 0; i < actual.length; i++) {
-      var error = recursiveCheck(actual[i], expected[i], decimals, strict);
-      if (error) return error;
-    }
+  for (var i = 0; i < actual.length; i++) {
+    var error = recursiveCheck(actual[i], expected[i], decimals, strict);
+    if (error) return error;
+  }
 
-    return false;
+  return false;
 }
 
-function cmpObjects( actual, expected, decimals, strict ) {
+function cmpObjects(actual, expected, decimals, strict) {
   var actualKeys = Object.keys(actual).sort();
   var expectedKeys = Object.keys(expected).sort();
   var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
 
   const noActualProp = (p) => !Object.prototype.hasOwnProperty.call(actual, p);
 
-  if (!sameLength || expectedKeys.some( noActualProp ) ) {
-      return {
-        reason: 'The objects do not have similar keys',
-        expected: expectedKeys,
-        received: actualKeys,
-      };
-    }
+  if (!sameLength || expectedKeys.some(noActualProp)) {
+    return {
+      reason: 'The objects do not have similar keys',
+      expected: expectedKeys,
+      received: actualKeys,
+    };
+  }
 
-    for (const prop in expected) {
-      var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);
-      if (properror) return properror;
-    }
+  for (const prop in expected) {
+    var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);
+    if (properror) return properror;
+  }
 
-    return false;
+  return false;
 }
