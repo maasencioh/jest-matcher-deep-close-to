@@ -1,6 +1,6 @@
-import { toBeDeepCloseTo } from '..';
+import { toBeDeepCloseTo, toMatchCloseTo } from '..';
 
-expect.extend({ toBeDeepCloseTo });
+expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('toBeDeepCloseTo', () => {
   it('numbers', () => {
@@ -109,5 +109,36 @@ describe('fails', () => {
 
   it('object with arrays with mismatched lengths', () => {
     expect({ x: [1.48], y: [3.01, 3.02] }).not.toBeDeepCloseTo({ x: 1.5, y: 3 }, 3);
+  });
+});
+
+describe('toMatchCloseTo', () => {
+  it('numbers', () => {
+    expect(42).toMatchCloseTo(42, 3);
+    expect(42.0003).toMatchCloseTo(42.0004, 3);
+  });
+
+  it('array', () => {
+    expect([42]).toMatchCloseTo([42], 3);
+    expect([42.0003]).toMatchCloseTo([42.0004], 3);
+  });
+
+  it('array of arrays', () => {
+    expect([[42]]).toMatchCloseTo([[42]], 3);
+    expect([[42.0003]]).toMatchCloseTo([[42.0004]], 3);
+  });
+
+  it('object with decimal values', () => {
+    expect({ x: 1.4999, y: 3.00001 }).toMatchCloseTo({ x: 1.5, y: 3 }, 3);
+    expect({ x: { a: 1.4999 }, y: 3.00001 }).toMatchCloseTo({ x: { a: 1.5 }, y: 3 }, 3);
+  });
+
+  it('object with NaN', () => {
+    expect({ x: 1.4999, y: NaN }).toMatchCloseTo({ x: 1.5, y: NaN }, 3);
+    expect({ x: 1.4999, y: 3 }).not.toMatchCloseTo({ x: 1.5, y: NaN }, 3);
+  });
+
+  it('dissimilar objects', () => {
+    expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, y: NaN }, 3);
   });
 });
