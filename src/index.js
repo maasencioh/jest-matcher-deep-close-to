@@ -81,20 +81,11 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     return cmpNumbers( actual, expected, decimals );
   }
 
-  if (Array.isArray(actual) && Array.isArray(expected)) {
-    if (actual.length !== expected.length) {
-      return {
-        reason: 'The arrays length does not match',
-        expected: expected.length,
-        received: actual.length
-      };
-    }
-    for (var i = 0; i < actual.length; i++) {
-      var error = recursiveCheck(actual[i], expected[i], decimals, strict);
-      if (error) return error;
-    }
-    return false;
-  } else if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
+  if( [actual,expected].every( Array.isArray ) ) {
+    return cmpArrays( actual, expected, decimals, strict );
+  }
+
+  if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
     var actualKeys = Object.keys(actual).sort();
     var expectedKeys = Object.keys(expected).sort();
     var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
@@ -112,14 +103,13 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
       if (properror) return properror;
     }
     return false;
-  } else {
-    // error for all other types
-    return {
-      reason: 'The current data types are not supported',
-      expected: typeof expected,
-      received: typeof actual
-    };
   }
+  // error for all other types
+  return {
+    reason: 'The current data types are not supported or do not match',
+    expected: typeof expected,
+    received: typeof actual
+  };
 }
 
 function cmpNumbers( actual, expected,  decimals ) {
@@ -134,4 +124,21 @@ function cmpNumbers( actual, expected,  decimals ) {
     expected: expected,
     received: actual
   };
+}
+
+function cmpArrays( actual, expected, decimals, strict ) {
+    if (actual.length !== expected.length) {
+      return {
+        reason: 'The arrays length does not match',
+        expected: expected.length,
+        received: actual.length
+      };
+    }
+
+    for (var i = 0; i < actual.length; i++) {
+      var error = recursiveCheck(actual[i], expected[i], decimals, strict);
+      if (error) return error;
+    }
+
+    return false;
 }
