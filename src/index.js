@@ -85,25 +85,10 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     return cmpArrays( actual, expected, decimals, strict );
   }
 
-  if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
-    var actualKeys = Object.keys(actual).sort();
-    var expectedKeys = Object.keys(expected).sort();
-    var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
-    if (!sameLength || expectedKeys.some(function (e) {
-      return !Object.prototype.hasOwnProperty.call(actual, e);
-    })) {
-      return {
-        reason: 'The objects do not have similar keys',
-        expected: expectedKeys,
-        received: actualKeys,
-      };
-    }
-    for (const prop in expected) {
-      var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);
-      if (properror) return properror;
-    }
-    return false;
+  if( typeof actual === 'object' ) {
+    return cmpObjects( actual, expected, decimals, strict );
   }
+
   // error for all other types
   return {
     reason: 'The current data types are not supported or do not match',
@@ -138,6 +123,29 @@ function cmpArrays( actual, expected, decimals, strict ) {
     for (var i = 0; i < actual.length; i++) {
       var error = recursiveCheck(actual[i], expected[i], decimals, strict);
       if (error) return error;
+    }
+
+    return false;
+}
+
+function cmpObjects( actual, expected, decimals, strict ) {
+  var actualKeys = Object.keys(actual).sort();
+  var expectedKeys = Object.keys(expected).sort();
+  var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
+
+  const noActualProp = (p) => !Object.prototype.hasOwnProperty.call(actual, p);
+
+  if (!sameLength || expectedKeys.some( noActualProp ) ) {
+      return {
+        reason: 'The objects do not have similar keys',
+        expected: expectedKeys,
+        received: actualKeys,
+      };
+    }
+
+    for (const prop in expected) {
+      var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);
+      if (properror) return properror;
     }
 
     return false;
