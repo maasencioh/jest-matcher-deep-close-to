@@ -30,12 +30,44 @@ export function toBeDeepCloseTo(received, expected, decimals) {
 }
 
 /**
+ *
+ * @param {number|Array} received
+ * @param {number|Array} expected
+ * @param {number} decimals
+ * @return {{message: (function(): string), pass: boolean}}
+ */
+export function toMatchCloseTo(received, expected, decimals) {
+  var error = recursiveCheck(received, expected, decimals, false);
+  /* istanbul ignore next */
+  if (error) {
+    return {
+      message: () => `${this.utils.matcherHint('.toMatchCloseTo')}\n\n` +
+        `${error.reason}:\n` +
+        `  ${this.utils.printExpected(error.expected)}\n` +
+        'Received:\n' +
+        `  ${this.utils.printReceived(error.received)}`,
+      pass: false
+    };
+  } else {
+    return {
+      message: () => `${this.utils.matcherHint('.not.toMatchCloseTo')}\n\n` +
+        'The observed object is a subset of its target:\n' +
+        `  ${this.utils.printExpected(expected)}\n` +
+        'Received:\n' +
+        `  ${this.utils.printReceived(received)}`,
+      pass: true
+    };
+  }
+}
+
+/**
  * @param {number|Array} actual
  * @param {number|Array} expected
  * @param {number} decimals
+ * @param {boolean} strict equality or subsets allowed
  * @return {boolean|{reason, expected, received}}
  */
-function recursiveCheck(actual, expected, decimals) {
+function recursiveCheck(actual, expected, decimals, strict = true) {
   if (typeof actual === 'number' && typeof expected === 'number') {
     if (isNaN(actual)) {
       return !isNaN(expected);
@@ -57,16 +89,17 @@ function recursiveCheck(actual, expected, decimals) {
       };
     }
     for (var i = 0; i < actual.length; i++) {
-      var error = recursiveCheck(actual[i], expected[i], decimals);
+      var error = recursiveCheck(actual[i], expected[i], decimals, strict);
       if (error) return error;
     }
     return false;
   } else if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
     var actualKeys = Object.keys(actual).sort();
     var expectedKeys = Object.keys(expected).sort();
-    if (!(actualKeys.length === expectedKeys.length && actualKeys.every(function (e, i) {
-      return e === expectedKeys[i];
-    }))) {
+    var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
+    if (!sameLength || expectedKeys.some(function (e, i) {
+      return e !== actualKeys[i];
+    })) {
       return {
         reason: 'The objects do not have similar keys',
         expected: expectedKeys,
@@ -74,7 +107,7 @@ function recursiveCheck(actual, expected, decimals) {
       };
     }
     for (const prop in expected) {
-      var properror = recursiveCheck(actual[prop], expected[prop], decimals);
+      var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);
       if (properror) return properror;
     }
     return false;
