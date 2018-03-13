@@ -68,6 +68,15 @@ export function toMatchCloseTo(received, expected, decimals) {
  * @return {boolean|{reason, expected, received}}
  */
 function recursiveCheck(actual, expected, decimals, strict = true) {
+
+  if ( typeof actual !== typeof expected ) {
+    return {
+      reason: 'The data types do not match',
+      expected: typeof expected,
+      received: typeof actual
+    };
+  }
+
   if (typeof actual === 'number' && typeof expected === 'number') {
     if (isNaN(actual)) {
       return !isNaN(expected);
