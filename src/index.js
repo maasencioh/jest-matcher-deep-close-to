@@ -17,16 +17,16 @@ export function toBeDeepCloseTo(received, expected, decimals) {
         `  ${this.utils.printReceived(error.received)}`,
       pass: false
     };
-  } else {
-    return {
-      message: () => `${this.utils.matcherHint('.not.toBeDeepCloseTo')}\n\n` +
-        'The two objects are deeply equal:\n' +
-        `  ${this.utils.printExpected(expected)}\n` +
-        'Received:\n' +
-        `  ${this.utils.printReceived(received)}`,
-      pass: true
-    };
   }
+
+  return {
+    message: () => `${this.utils.matcherHint('.not.toBeDeepCloseTo')}\n\n` +
+      'The two objects are deeply equal:\n' +
+      `  ${this.utils.printExpected(expected)}\n` +
+      'Received:\n' +
+      `  ${this.utils.printReceived(received)}`,
+    pass: true
+  };
 }
 
 /**
@@ -48,16 +48,16 @@ export function toMatchCloseTo(received, expected, decimals) {
         `  ${this.utils.printReceived(error.received)}`,
       pass: false
     };
-  } else {
-    return {
-      message: () => `${this.utils.matcherHint('.not.toMatchCloseTo')}\n\n` +
-        'The observed object is a subset of its target:\n' +
-        `  ${this.utils.printExpected(expected)}\n` +
-        'Received:\n' +
-        `  ${this.utils.printReceived(received)}`,
-      pass: true
-    };
   }
+
+  return {
+    message: () => `${this.utils.matcherHint('.not.toMatchCloseTo')}\n\n` +
+      'The observed object is a subset of its target:\n' +
+      `  ${this.utils.printExpected(expected)}\n` +
+      'Received:\n' +
+      `  ${this.utils.printReceived(received)}`,
+    pass: true
+  };
 }
 
 /**
