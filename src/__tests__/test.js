@@ -97,5 +97,6 @@ describe('toMatchCloseTo', () => {
 
   it('dissimilar objects', () => {
     expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, y: NaN }, 3);
+    expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, z: 100 }, 3);
   });
 });
