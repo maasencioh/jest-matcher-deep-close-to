@@ -76,10 +76,6 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     };
   }
 
-  if (typeof actual === 'string') {
-    return cmpString(actual, expected);
-  }
-
   if (typeof actual === 'number') {
     return cmpNumbers(actual, expected, decimals);
   }
@@ -97,16 +93,6 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     reason: 'The current data types are not supported or do not match',
     expected: typeof expected,
     received: typeof actual
-  };
-}
-
-function cmpString(actual, expected) {
-  if (actual === expected) return false;
-
-  return {
-    reason: `Expected string '${actual}' to be '$expected'`,
-    expected,
-    received: actual,
   };
 }
 
@@ -146,15 +132,25 @@ function cmpObjects(actual, expected, decimals, strict) {
   var expectedKeys = Object.keys(expected).sort();
   var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
 
+<<<<<<< 108d7cbbf5cc299f66d9798824a0678f85a7d560
   const noActualProp = (p) => !Object.prototype.hasOwnProperty.call(actual, p);
 
-  if (!sameLength || expectedKeys.some(noActualProp)) {
+  if (!sameLength || expectedKeys.some( noActualProp ) ) {
+      return {
+        reason: 'The objects do not have similar keys',
+        expected: expectedKeys,
+        received: actualKeys,
+      };
+    }
+=======
+  if (!sameLength || expectedKeys.some((e, i) => e !== actualKeys[i])) {
     return {
       reason: 'The objects do not have similar keys',
       expected: expectedKeys,
       received: actualKeys,
     };
   }
+>>>>>>> eslint
 
   for (const prop in expected) {
     var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);

@@ -27,6 +27,10 @@ describe('toBeDeepCloseTo', () => {
     expect({ x: 1.4999, y: NaN }).toBeDeepCloseTo({ x: 1.5, y: NaN }, 3);
     expect({ x: 1.4999, y: 3 }).not.toBeDeepCloseTo({ x: 1.5, y: NaN }, 3);
   });
+
+  it('object with a string', () => {
+    expect({ x: 'foo' }).toBeDeepCloseTo({ x: 'foo' });
+  });
 });
 
 
