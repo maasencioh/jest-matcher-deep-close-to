@@ -51,12 +51,12 @@ function recursiveCheck(actual, expected, decimals) {
         received: actual
       };
     }
-  } else if (typeof actual === 'string' && typeof expected === 'string') {
+  } else if ((typeof actual === 'string' && typeof expected === 'string') || (typeof actual === 'boolean' && typeof expected === 'boolean')) {
     if (actual === expected) {
       return false;
     } else {
       return {
-        reason: 'The strings do not match',
+        reason: `The ${typeof (expected)}s do not match`,
         expected: expected,
         received: actual
       };
@@ -73,6 +73,8 @@ function recursiveCheck(actual, expected, decimals) {
       var error = recursiveCheck(actual[i], expected[i], decimals);
       if (error) return error;
     }
+    return false;
+  } else if (expected === null && actual === null) {
     return false;
   } else if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
     var actualKeys = Object.keys(actual).sort();
