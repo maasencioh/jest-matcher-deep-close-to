@@ -51,6 +51,16 @@ function recursiveCheck(actual, expected, decimals) {
         received: actual
       };
     }
+  } else if (typeof actual === 'string' && typeof expected === 'string') {
+    if (actual === expected) {
+      return false;
+    } else {
+      return {
+        reason: 'The strings do not match',
+        expected: expected,
+        received: actual
+      };
+    }
   } else if (Array.isArray(actual) && Array.isArray(expected)) {
     if (actual.length !== expected.length) {
       return {

@@ -12,6 +12,11 @@ describe('toBeDeepCloseTo', () => {
     expect(42).toBeDeepCloseTo(42);
   });
 
+  it('strings', () => {
+    expect('test').toBeDeepCloseTo('test');
+    expect('test').toBeDeepCloseTo('test', 3);
+  });
+
   it('array', () => {
     expect([42]).toBeDeepCloseTo([42], 3);
     expect([42.0003]).toBeDeepCloseTo([42.0004], 3);
@@ -42,6 +47,11 @@ describe('fails', () => {
 
   it('numbers defaut digits', () => {
     expect(42.0003).not.toBeDeepCloseTo(42.0004);
+  });
+
+  it('strings', () => {
+    expect('test').not.toBeDeepCloseTo('rest');
+    expect('test').not.toBeDeepCloseTo('rest', 3);
   });
 
   it('array', () => {
