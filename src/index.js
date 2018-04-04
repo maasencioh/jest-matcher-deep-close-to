@@ -2,10 +2,13 @@
  *
  * @param {number|Array} received
  * @param {number|Array} expected
- * @param {number} decimals
+ * @param {number} [decimals=10] decimals
  * @return {{message: (function(): string), pass: boolean}}
  */
 export function toBeDeepCloseTo(received, expected, decimals) {
+  if (decimals === undefined) {
+    decimals = 10;
+  }
   var error = recursiveCheck(received, expected, decimals);
   /* istanbul ignore next */
   if (error) {
