@@ -32,14 +32,14 @@
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "codecov": "^2.2.0",
+    "codecov": "^3.0.1",
     "eslint": "^4.17.0",
     "eslint-config-cheminfo": "^1.15.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.9.0",
     "eslint-plugin-no-only-tests": "^2.0.0",
-    "jest": "^20.0.4",
+    "jest": "^22.4.3",
     "npm-run-all": "^4.0.2",
-    "rollup": "^0.45.2"
+    "rollup": "^0.58.2"
   }
 }
