@@ -4,9 +4,11 @@
   "description": "Extend jest to assert arrays with approximate values",
   "main": "lib/index.js",
   "module": "src/index.js",
+  "types": "index.d.ts",
   "files": [
     "lib",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "scripts": {
     "eslint": "eslint src",
