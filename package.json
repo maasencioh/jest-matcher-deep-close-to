@@ -1,11 +1,16 @@
 {
   "name": "jest-matcher-deep-close-to",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Extend jest to assert arrays with approximate values",
   "main": "./lib/index.js",
   "module": "./lib-esm/index.js",
   "types": "./lib/index.d.ts",
-  "keywords": [],
+  "keywords": [
+    "jest",
+    "jest-tests",
+    "jest-matchers",
+    "arrays"
+  ],
   "author": "Miguel Angel Asencio Hurtado",
   "license": "MIT",
   "files": [
