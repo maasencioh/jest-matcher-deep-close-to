@@ -1,9 +1,8 @@
 # jest-matcher-deep-close-to
 
-  [![NPM version][npm-image]][npm-url]
-  [![build status][travis-image]][travis-url]
-  [![Test coverage][codecov-image]][codecov-url]
-  [![npm download][download-image]][download-url]
+[![NPM version][npm-image]][npm-url]
+[![build status][ci-image]][ci-url]
+[![npm download][download-image]][download-url]
 
 Extend jest to assert arrays and objects with approximate values.
 
@@ -33,13 +32,11 @@ describe('test myModule', () => {
 
 ## License
 
-  [MIT](./LICENSE)
+[MIT](./LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/jest-matcher-deep-close-to.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/jest-matcher-deep-close-to
-[travis-image]: https://img.shields.io/travis/maasencioh/jest-matcher-deep-close-to/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/maasencioh/jest-matcher-deep-close-to
-[codecov-image]: https://img.shields.io/codecov/c/github/maasencioh/jest-matcher-deep-close-to.svg?style=flat-square
-[codecov-url]: https://codecov.io/gh/maasencioh/jest-matcher-deep-close-to
-[download-image]: https://img.shields.io/npm/dm/jest-matcher-deep-close-to.svg?style=flat-square
-[download-url]: https://npmjs.org/package/jest-matcher-deep-close-to
+[npm-image]: https://img.shields.io/npm/v/jest-matcher-deep-close-to.svg
+[npm-url]: https://www.npmjs.com/package/jest-matcher-deep-close-to
+[ci-image]: https://github.com/maasencioh/jest-matcher-deep-close-to/workflows/Node.js%20CI/badge.svg?branch=master
+[ci-url]: https://github.com/maasencioh/jest-matcher-deep-close-to/actions?query=workflow%3A%22Node.js+CI%22
+[download-image]: https://img.shields.io/npm/dm/jest-matcher-deep-close-to.svg
+[download-url]: https://www.npmjs.com/package/jest-matcher-deep-close-to

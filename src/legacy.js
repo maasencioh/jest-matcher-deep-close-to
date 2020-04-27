@@ -13,21 +13,23 @@ export function toBeDeepCloseTo(received, expected, decimals) {
   /* istanbul ignore next */
   if (error) {
     return {
-      message: () => `${this.utils.matcherHint('.toBeDeepCloseTo')}\n\n` +
+      message: () =>
+        `${this.utils.matcherHint('.toBeDeepCloseTo')}\n\n` +
         `${error.reason}:\n` +
         `  ${this.utils.printExpected(error.expected)}\n` +
         'Received:\n' +
         `  ${this.utils.printReceived(error.received)}`,
-      pass: false
+      pass: false,
     };
   } else {
     return {
-      message: () => `${this.utils.matcherHint('.not.toBeDeepCloseTo')}\n\n` +
+      message: () =>
+        `${this.utils.matcherHint('.not.toBeDeepCloseTo')}\n\n` +
         'The two objects are deeply equal:\n' +
         `  ${this.utils.printExpected(expected)}\n` +
         'Received:\n' +
         `  ${this.utils.printReceived(received)}`,
-      pass: true
+      pass: true,
     };
   }
 }
@@ -44,21 +46,23 @@ export function toMatchCloseTo(received, expected, decimals) {
   /* istanbul ignore next */
   if (error) {
     return {
-      message: () => `${this.utils.matcherHint('.toMatchCloseTo')}\n\n` +
+      message: () =>
+        `${this.utils.matcherHint('.toMatchCloseTo')}\n\n` +
         `${error.reason}:\n` +
         `  ${this.utils.printExpected(error.expected)}\n` +
         'Received:\n' +
         `  ${this.utils.printReceived(error.received)}`,
-      pass: false
+      pass: false,
     };
   } else {
     return {
-      message: () => `${this.utils.matcherHint('.not.toMatchCloseTo')}\n\n` +
+      message: () =>
+        `${this.utils.matcherHint('.not.toMatchCloseTo')}\n\n` +
         'The observed object is a subset of its target:\n' +
         `  ${this.utils.printExpected(expected)}\n` +
         'Received:\n' +
         `  ${this.utils.printReceived(received)}`,
-      pass: true
+      pass: true,
     };
   }
 }
@@ -74,23 +78,26 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
   if (typeof actual === 'number' && typeof expected === 'number') {
     if (isNaN(actual)) {
       return !isNaN(expected);
-    } else if ((Math.abs(actual - expected) <= Math.pow(10, -decimals))) {
+    } else if (Math.abs(actual - expected) <= Math.pow(10, -decimals)) {
       return false;
     } else {
       return {
         reason: `Expected value to be (using ${decimals} decimals)`,
         expected: expected,
-        received: actual
+        received: actual,
       };
     }
-  } else if ((typeof actual === 'string' && typeof expected === 'string') || (typeof actual === 'boolean' && typeof expected === 'boolean')) {
+  } else if (
+    (typeof actual === 'string' && typeof expected === 'string') ||
+    (typeof actual === 'boolean' && typeof expected === 'boolean')
+  ) {
     if (actual === expected) {
       return false;
     } else {
       return {
-        reason: `The ${typeof (expected)}s do not match`,
+        reason: `The ${typeof expected}s do not match`,
         expected: expected,
-        received: actual
+        received: actual,
       };
     }
   } else if (Array.isArray(actual) && Array.isArray(expected)) {
@@ -98,7 +105,7 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
       return {
         reason: 'The arrays length does not match',
         expected: expected.length,
-        received: actual.length
+        received: actual.length,
       };
     }
     for (var i = 0; i < actual.length; i++) {
@@ -108,13 +115,21 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     return false;
   } else if (expected === null && actual === null) {
     return false;
-  } else if (expected !== null && typeof expected === 'object' && actual !== null && typeof actual === 'object') {
+  } else if (
+    expected !== null &&
+    typeof expected === 'object' &&
+    actual !== null &&
+    typeof actual === 'object'
+  ) {
     var actualKeys = Object.keys(actual).sort();
     var expectedKeys = Object.keys(expected).sort();
-    var sameLength = (!strict) || (actualKeys.length === expectedKeys.length);
-    if (!sameLength || expectedKeys.some(function (e) {
-      return !Object.prototype.hasOwnProperty.call(actual, e);
-    })) {
+    var sameLength = !strict || actualKeys.length === expectedKeys.length;
+    if (
+      !sameLength ||
+      expectedKeys.some(function (e) {
+        return !Object.prototype.hasOwnProperty.call(actual, e);
+      })
+    ) {
       return {
         reason: 'The objects do not have similar keys',
         expected: expectedKeys,
@@ -122,7 +137,12 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
       };
     }
     for (const prop in expected) {
-      var properror = recursiveCheck(actual[prop], expected[prop], decimals, strict);
+      var properror = recursiveCheck(
+        actual[prop],
+        expected[prop],
+        decimals,
+        strict,
+      );
       if (properror) return properror;
     }
     return false;
@@ -131,7 +151,7 @@ function recursiveCheck(actual, expected, decimals, strict = true) {
     return {
       reason: 'The current data type is not supported or they do not match',
       expected: typeof expected,
-      received: typeof actual
+      received: typeof actual,
     };
   }
 }

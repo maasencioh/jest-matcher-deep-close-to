@@ -1,32 +1,17 @@
 declare global {
   namespace jest {
+    type Iterable = number | number[] | { [k: string]: Iterable };
     interface Matchers<R> {
       toBeDeepCloseTo: (
-        expected: number | number[] | object,
-        decimals?: number
+        received: Iterable,
+        expected: Iterable,
+        decimals?: number,
       ) => R;
       toMatchCloseTo: (
-        expected: number | number[] | object,
-        decimals?: number
+        received: Iterable,
+        expected: Iterable,
+        decimals?: number,
       ) => R;
     }
   }
-}
-
-export function toBeDeepCloseTo(
-  received: number | number[] | object,
-  expected: number | number[] | object,
-  decimals?: number
-): {
-  message(): string;
-  pass: boolean;
-}
-
-export function toMatchCloseTo(
-  received: number | number[] | object,
-  expected: number | number[] | object,
-  decimals?: number
-): {
-  message(): string;
-  pass: boolean;
 }
