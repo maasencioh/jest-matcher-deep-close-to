@@ -108,6 +108,15 @@ describe('toMatchCloseTo', () => {
     expect({ x: 1.4999, y: 3 }).not.toMatchCloseTo({ x: 1.5, y: NaN }, 3);
   });
 
+  it('object with Infinity', () => {
+    expect({ x: Infinity, y: -Infinity }).toMatchCloseTo(
+      { x: Infinity, y: -Infinity },
+      3,
+    );
+    expect({ x: 9999 }).not.toMatchCloseTo({ x: Infinity }, 3);
+    expect({ x: Infinity }).not.toMatchCloseTo({ x: -Infinity }, 3);
+  });
+
   it('dissimilar objects', () => {
     expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, y: NaN }, 3);
     expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, z: 100 }, 3);

@@ -36,6 +36,14 @@ export function recursiveCheck(
             expected,
             received,
           };
+    } else if (!isFinite(received)) {
+      return received === expected
+        ? false
+        : {
+            reason: `Expected value to be`,
+            expected,
+            received,
+          };
     } else if (Math.abs(received - expected) <= Math.pow(10, -decimals)) {
       return false;
     } else {
