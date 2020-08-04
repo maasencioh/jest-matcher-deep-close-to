@@ -1,4 +1,9 @@
-import { matcherHint, printExpected, printReceived } from 'jest-matcher-utils';
+import {
+  matcherHint,
+  printExpected,
+  printReceived,
+  printDiffOrStringify,
+} from 'jest-matcher-utils';
 
 import { recursiveCheck, Iterable, Error } from './recursiveCheck';
 
@@ -20,7 +25,14 @@ function printResponse(
         `${error.reason}:\n` +
         `  ${printExpected(error.expected)}\n` +
         'Received:\n' +
-        `  ${printReceived(error.received)}`,
+        `  ${printReceived(error.received)}\n` +
+        `Full diff: \n${printDiffOrStringify(
+          expected,
+          received,
+          'Expected',
+          'Received',
+          true,
+        )}`,
       pass: false,
     };
   } else {

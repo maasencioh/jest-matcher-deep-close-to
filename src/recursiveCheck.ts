@@ -80,7 +80,14 @@ export function recursiveCheck(
     }
     for (let i = 0; i < received.length; i++) {
       const error = recursiveCheck(received[i], expected[i], decimals, strict);
-      if (error) return error;
+      if (error) {
+        return {
+          ...error,
+          ...{
+            reason: `index ${i} - ${error.reason}`,
+          },
+        };
+      }
     }
     return false;
   } else if (expected === null && received === null) {
@@ -120,7 +127,14 @@ export function recursiveCheck(
         decimals,
         strict,
       );
-      if (propError) return propError;
+      if (propError) {
+        return {
+          ...propError,
+          ...{
+            reason: `key ${prop} - ${propError.reason}`,
+          },
+        };
+      }
     }
     return false;
   } else {
