@@ -8,7 +8,7 @@ Extend jest to assert arrays and objects with approximate values.
 
 ## Installation
 
-`$ npm install --save jest-matcher-deep-close-to`
+`$ npm i -D jest-matcher-deep-close-to`
 
 ## Usage
 
