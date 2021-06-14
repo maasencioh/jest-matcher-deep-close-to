@@ -22,6 +22,11 @@ describe('toBeDeepCloseTo', () => {
     expect(false).toBeDeepCloseTo(false, 3);
   });
 
+  it('undefined', () => {
+    expect(undefined).toBeDeepCloseTo(undefined);
+    expect(undefined).toBeDeepCloseTo(undefined, 3);
+  });
+
   it('null', () => {
     expect(null).toBeDeepCloseTo(null);
     expect(null).toBeDeepCloseTo(null, 3);
@@ -30,8 +35,8 @@ describe('toBeDeepCloseTo', () => {
   it('array', () => {
     expect([42]).toBeDeepCloseTo([42], 3);
     expect([42.0003]).toBeDeepCloseTo([42.0004], 3);
-    expect([null, 'hello', true, 42.0003]).toBeDeepCloseTo(
-      [null, 'hello', true, 42.0004],
+    expect([undefined, null, 'hello', true, 42.0003]).toBeDeepCloseTo(
+      [undefined, null, 'hello', true, 42.0004],
       3,
     );
   });
@@ -84,6 +89,11 @@ describe('fails', () => {
     expect(true).not.toBeDeepCloseTo(false, 3);
   });
 
+  it('undefined', () => {
+    expect(undefined).not.toBeDeepCloseTo(null);
+    expect(undefined).not.toBeDeepCloseTo(null, 3);
+  });
+
   it('null', () => {
     expect(null).not.toBeDeepCloseTo(undefined);
     expect(null).not.toBeDeepCloseTo(undefined, 3);
@@ -92,20 +102,24 @@ describe('fails', () => {
   it('array', () => {
     expect([43]).not.toBeDeepCloseTo([42], 3);
     expect([42.03]).not.toBeDeepCloseTo([42.0004], 3);
-    expect([null, 'hello', true, 42.03]).not.toBeDeepCloseTo(
-      [null, 'hello', true, 42.0004],
+    expect([null, 'hello', true, 42, undefined]).not.toBeDeepCloseTo(
+      [null, 'hello', true, 42],
       3,
     );
-    expect([null, 'hello', true, 42]).not.toBeDeepCloseTo(
-      [null, 'hello', false, 42],
+    expect([null, 'hello', true, 42.03, undefined]).not.toBeDeepCloseTo(
+      [null, 'hello', true, 42.0004, undefined],
       3,
     );
-    expect([null, 'hello', true, 42]).not.toBeDeepCloseTo(
-      [null, 'goodbye', true, 42],
+    expect([null, 'hello', true, 42, undefined]).not.toBeDeepCloseTo(
+      [null, 'hello', false, 42, undefined],
       3,
     );
-    expect([null, 'hello', true, 42]).not.toBeDeepCloseTo(
-      [{}, 'hello', true, 42],
+    expect([null, 'hello', true, 42, undefined]).not.toBeDeepCloseTo(
+      [null, 'goodbye', true, 42, undefined],
+      3,
+    );
+    expect([null, 'hello', true, 42, undefined]).not.toBeDeepCloseTo(
+      [{}, 'hello', true, 42, undefined],
       3,
     );
   });
