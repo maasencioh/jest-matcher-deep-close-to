@@ -103,7 +103,7 @@ describe('fails', () => {
     expect([43]).not.toBeDeepCloseTo([42], 3);
     expect([42.03]).not.toBeDeepCloseTo([42.0004], 3);
     expect([null, 'hello', true, 42, undefined]).not.toBeDeepCloseTo(
-      [null, 'hello', true, 42],
+      [null, 'hello', true, 42, null],
       3,
     );
     expect([null, 'hello', true, 42.03, undefined]).not.toBeDeepCloseTo(
