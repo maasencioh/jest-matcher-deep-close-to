@@ -22,6 +22,11 @@ describe('fails', () => {
     expect(true).not.toMatchCloseTo(false, 3);
   });
 
+  it('undefined', () => {
+    expect(undefined).not.toMatchCloseTo(null);
+    expect(undefined).not.toMatchCloseTo(null, 3);
+  });
+
   it('null', () => {
     expect(null).not.toMatchCloseTo(undefined);
     expect(null).not.toMatchCloseTo(undefined, 3);
@@ -30,20 +35,24 @@ describe('fails', () => {
   it('array', () => {
     expect([43]).not.toMatchCloseTo([42], 3);
     expect([42.03]).not.toMatchCloseTo([42.0004], 3);
-    expect([null, 'hello', true, 42.03]).not.toMatchCloseTo(
-      [null, 'hello', true, 42.0004],
+    expect([null, 'hello', true, 42, undefined]).not.toMatchCloseTo(
+      [null, 'hello', true, 42, null],
       3,
     );
-    expect([null, 'hello', true, 42]).not.toMatchCloseTo(
-      [null, 'hello', false, 42],
+    expect([null, 'hello', true, 42.03, undefined]).not.toMatchCloseTo(
+      [null, 'hello', true, 42.0004, undefined],
       3,
     );
-    expect([null, 'hello', true, 42]).not.toMatchCloseTo(
-      [null, 'goodbye', true, 42],
+    expect([null, 'hello', true, 42, undefined]).not.toMatchCloseTo(
+      [null, 'hello', false, 42, undefined],
       3,
     );
-    expect([null, 'hello', true, 42]).not.toMatchCloseTo(
-      [{}, 'hello', true, 42],
+    expect([null, 'hello', true, 42, undefined]).not.toMatchCloseTo(
+      [null, 'goodbye', true, 42, undefined],
+      3,
+    );
+    expect([null, 'hello', true, 42, undefined]).not.toMatchCloseTo(
+      [{}, 'hello', true, 42, undefined],
       3,
     );
   });
@@ -120,5 +129,16 @@ describe('toMatchCloseTo', () => {
   it('dissimilar objects', () => {
     expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, y: NaN }, 3);
     expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, z: 100 }, 3);
+  });
+
+  it('explicit/implicit undefined', () => {
+    expect({ x: 1.4999, y: undefined, z: 100 }).toMatchCloseTo(
+      { y: undefined, z: 100 },
+      3,
+    );
+    expect({ x: 1.4999, y: undefined, z: 100 }).toMatchCloseTo(
+      { x: 1.5, z: 100 },
+      3,
+    );
   });
 });

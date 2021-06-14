@@ -90,6 +90,13 @@ export function recursiveCheck(
       }
     }
     return false;
+  } else if (expected === undefined && received === undefined) {
+    /* Received and expected are either
+     * 1) both explicitly set as undefined
+     * 2) undefined properties of an object, where the received value may be implicitly undefined
+     */
+
+    return false;
   } else if (expected === null && received === null) {
     // Received and expected are null
 
