@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace jest {
   type Iterable =
     | number
