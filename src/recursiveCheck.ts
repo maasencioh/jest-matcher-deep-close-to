@@ -1,4 +1,4 @@
-import type { Iterable, Error } from './types';
+import type { Iterable, Error, IterableObject } from './types';
 import { calculatePrecision } from './utils';
 
 /**
@@ -58,18 +58,24 @@ export function recursiveCheck(
         received,
       };
     }
-  } else if (Array.isArray(received) && Array.isArray(expected)) {
+  } else if (isArray(received) && isArray(expected)) {
     // Received and expected are arrays
-
-    if (received.length !== expected.length) {
+    const receivedLength = (received as ArrayType).length;
+    const expectedLength = (expected as ArrayType).length;
+    if (receivedLength !== expectedLength) {
       return {
         reason: 'The arrays length does not match',
-        expected: expected.length,
-        received: received.length,
+        expected: expectedLength,
+        received: receivedLength,
       };
     }
-    for (let i = 0; i < received.length; i++) {
-      const error = recursiveCheck(received[i], expected[i], precision, strict);
+    for (let i = 0; i < receivedLength; i++) {
+      const error = recursiveCheck(
+        (received as ArrayType)[i],
+        (expected as ArrayType)[i],
+        precision,
+        strict,
+      );
       if (error) {
         return { ...error, index: i };
       }
@@ -114,8 +120,8 @@ export function recursiveCheck(
     }
     for (const prop in expected) {
       const propError = recursiveCheck(
-        received[prop],
-        expected[prop],
+        (received as IterableObject)[prop],
+        (expected as IterableObject)[prop],
         precision,
         strict,
       );
@@ -132,4 +138,13 @@ export function recursiveCheck(
       received: typeof received,
     };
   }
+}
+
+type ArrayType = Float32Array | Float64Array | Array<Iterable>;
+function isArray(value: Iterable): boolean {
+  return (
+    Array.isArray(value) ||
+    value instanceof Float32Array ||
+    value instanceof Float64Array
+  );
 }
