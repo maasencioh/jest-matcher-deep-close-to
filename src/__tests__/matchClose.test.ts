@@ -8,8 +8,8 @@ describe('fails', () => {
     expect(42.03).not.toMatchCloseTo(42.0004, 3);
   });
 
-  it('numbers defaut digits', () => {
-    expect(42.0003).not.toMatchCloseTo(42.0004);
+  it('numbers default digits', () => {
+    expect(42.03).not.toMatchCloseTo(42.04);
   });
 
   it('strings', () => {

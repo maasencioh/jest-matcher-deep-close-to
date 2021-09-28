@@ -51,11 +51,8 @@ function printResponse(
 export function toBeDeepCloseTo(
   received: Iterable,
   expected: Iterable,
-  decimals?: number,
+  decimals = 2,
 ): MatcherResult {
-  if (decimals === undefined) {
-    decimals = 10;
-  }
   const error = recursiveCheck(received, expected, decimals);
   return printResponse(error, received, expected);
 }
@@ -63,11 +60,8 @@ export function toBeDeepCloseTo(
 export function toMatchCloseTo(
   received: Iterable,
   expected: Iterable,
-  decimals?: number,
+  decimals = 2,
 ): MatcherResult {
-  if (decimals === undefined) {
-    decimals = 10;
-  }
   const error = recursiveCheck(received, expected, decimals, false);
   return printResponse(error, received, expected);
 }
