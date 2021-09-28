@@ -1,7 +1,12 @@
+export interface IterableObject {
+  [k: string]: Iterable;
+}
 export type Iterable =
   | number
   | Iterable[]
-  | { [k: string]: Iterable }
+  | Float32Array
+  | Float64Array
+  | IterableObject
   | string
   | null
   | undefined

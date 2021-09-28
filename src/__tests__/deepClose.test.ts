@@ -67,6 +67,11 @@ describe('toBeDeepCloseTo', () => {
     expect({ x: 9999 }).not.toBeDeepCloseTo({ x: Infinity }, 3);
     expect({ x: Infinity }).not.toBeDeepCloseTo({ x: -Infinity }, 3);
   });
+
+  it('typed arrays', () => {
+    expect(new Float64Array([1, 1])).toBeDeepCloseTo([1, 1]);
+    expect([1, 1]).toBeDeepCloseTo(new Float32Array([1, 1]));
+  });
 });
 
 describe('fails', () => {
@@ -153,5 +158,10 @@ describe('fails', () => {
       { x: 1.5, y: 3 },
       3,
     );
+  });
+
+  it('typed arrays', () => {
+    expect(new Float64Array([1, 1])).not.toBeDeepCloseTo([1, 2]);
+    expect([1, 1]).not.toBeDeepCloseTo(new Float32Array([1, 2]));
   });
 });
