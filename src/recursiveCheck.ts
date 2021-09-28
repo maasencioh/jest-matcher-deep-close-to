@@ -1,28 +1,17 @@
-export type Iterable =
-  | number
-  | Iterable[]
-  | { [k: string]: Iterable }
-  | string
-  | null
-  | undefined
-  | boolean;
-export interface Error {
-  reason: string;
-  expected: unknown;
-  received: unknown;
-}
+import type { Iterable, Error } from './types';
+import { calculatePrecision } from './utils';
 
 /**
  * @param {number|Array} received
  * @param {number|Array} expected
- * @param {number} decimals
+ * @param {number} precision
  * @param {boolean} strict equality or subsets allowed
  * @return {boolean|{reason, expected, received}}
  */
 export function recursiveCheck(
   received: Iterable,
   expected: Iterable,
-  decimals: number,
+  precision: number,
   strict = true,
 ): false | Error {
   if (typeof received === 'number' && typeof expected === 'number') {
@@ -32,7 +21,7 @@ export function recursiveCheck(
       return isNaN(expected)
         ? false
         : {
-            reason: `Expected value to be (using ${decimals} decimals)`,
+            reason: 'Expected',
             expected,
             received,
           };
@@ -40,17 +29,18 @@ export function recursiveCheck(
       return received === expected
         ? false
         : {
-            reason: `Expected value to be`,
+            reason: 'Expected',
             expected,
             received,
           };
-    } else if (Math.abs(received - expected) <= 0.5 * Math.pow(10, -decimals)) {
+    } else if (Math.abs(received - expected) <= calculatePrecision(precision)) {
       return false;
     } else {
       return {
-        reason: `Expected value to be (using ${decimals} decimals)`,
+        reason: 'Expected',
         expected,
         received,
+        diff: Math.abs(received - expected),
       };
     }
   } else if (
@@ -79,14 +69,9 @@ export function recursiveCheck(
       };
     }
     for (let i = 0; i < received.length; i++) {
-      const error = recursiveCheck(received[i], expected[i], decimals, strict);
+      const error = recursiveCheck(received[i], expected[i], precision, strict);
       if (error) {
-        return {
-          ...error,
-          ...{
-            reason: `index ${i} - ${error.reason}`,
-          },
-        };
+        return { ...error, index: i };
       }
     }
     return false;
@@ -131,16 +116,11 @@ export function recursiveCheck(
       const propError = recursiveCheck(
         received[prop],
         expected[prop],
-        decimals,
+        precision,
         strict,
       );
       if (propError) {
-        return {
-          ...propError,
-          ...{
-            reason: `key ${prop} - ${propError.reason}`,
-          },
-        };
+        return { ...propError, key: prop };
       }
     }
     return false;
