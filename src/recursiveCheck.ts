@@ -44,7 +44,7 @@ export function recursiveCheck(
             expected,
             received,
           };
-    } else if (Math.abs(received - expected) <= Math.pow(10, -decimals)) {
+    } else if (Math.abs(received - expected) <= 0.5 * Math.pow(10, -decimals)) {
       return false;
     } else {
       return {
@@ -117,9 +117,9 @@ export function recursiveCheck(
     const sameLength = !strict || receivedKeys.length === expectedKeys.length;
     if (
       !sameLength ||
-      expectedKeys.some(function (e) {
-        return !Object.prototype.hasOwnProperty.call(received, e);
-      })
+      expectedKeys.some(
+        (e) => !Object.prototype.hasOwnProperty.call(received, e),
+      )
     ) {
       return {
         reason: 'The objects do not have similar keys',
