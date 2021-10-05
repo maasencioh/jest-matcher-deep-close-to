@@ -51,7 +51,7 @@ export function printCloseTo(
   const { index, key, diff } = error;
 
   if (diff !== undefined) {
-    const receivedDiff = Math.abs((received as number) - (expected as number));
+    const receivedDiff = diff;
     const expectedDiff = calculatePrecision(precision);
 
     const receivedDiffString = stringify(receivedDiff);
