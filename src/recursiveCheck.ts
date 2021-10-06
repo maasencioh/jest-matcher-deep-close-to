@@ -1,6 +1,103 @@
 import type { Iterable, Error, IterableObject } from './types';
 import { calculatePrecision } from './utils';
 
+type CmpResult = false | Error;
+
+function cmpNumber(
+  received: number,
+  expected: number,
+  precision: number,
+): CmpResult {
+  if (isNaN(received))
+    return isNaN(expected) ? false : { reason: 'Expected', expected, received };
+
+  if (!isFinite(received))
+    return received === expected
+      ? false
+      : { reason: 'Expected', expected, received };
+
+  if (Math.abs(received - expected) <= calculatePrecision(precision))
+    return false;
+
+  return {
+    reason: 'Expected',
+    expected,
+    received,
+    diff: Math.abs(received - expected),
+  };
+}
+
+function cmpEqual<T>(received: T, expected: T): CmpResult {
+  if (received === expected) return false;
+
+  return {
+    reason: `The ${typeof expected}s do not match`,
+    expected,
+    received,
+  };
+}
+
+function cmpArray(
+  received: any[],
+  expected: any[],
+  precision: number,
+  strict: boolean,
+): CmpResult {
+  const receivedLength = received.length;
+  const expectedLength = expected.length;
+  if (receivedLength !== expectedLength)
+    return {
+      reason: 'The arrays length does not match',
+      expected: expectedLength,
+      received: receivedLength,
+    };
+
+  for (let i = 0; i < receivedLength; i++) {
+    const error = recursiveCheck(received[i], expected[i], precision, strict);
+    if (error) {
+      return { ...error, index: i };
+    }
+  }
+
+  return false;
+}
+
+function cmpObject(
+  received: {},
+  expected: {},
+  precision: number,
+  strict: boolean,
+): CmpResult {
+  const sorter = (a: string, b: string) => a.localeCompare(b);
+
+  const receivedKeys = Object.keys(received).sort(sorter);
+  const expectedKeys = Object.keys(expected).sort(sorter);
+
+  const sameLength = !strict || receivedKeys.length === expectedKeys.length;
+
+  if (
+    !sameLength ||
+    expectedKeys.some((e) => !Object.prototype.hasOwnProperty.call(received, e))
+  )
+    return {
+      reason: 'The objects do not have similar keys',
+      expected: expectedKeys,
+      received: receivedKeys,
+    };
+
+  for (const prop in expected) {
+    const propError = recursiveCheck(
+      (received as IterableObject)[prop],
+      (expected as IterableObject)[prop],
+      precision,
+      strict,
+    );
+    if (propError) return { ...propError, key: prop };
+  }
+
+  return false;
+}
+
 /**
  * @param {number|Array} received
  * @param {number|Array} expected
@@ -14,130 +111,46 @@ export function recursiveCheck(
   precision: number,
   strict = true,
 ): false | Error {
-  if (typeof received === 'number' && typeof expected === 'number') {
-    // Received and expected are numbers
+  // Received and expected are numbers
+  if (typeof received === 'number' && typeof expected === 'number')
+    return cmpNumber(received, expected, precision);
 
-    if (isNaN(received)) {
-      return isNaN(expected)
-        ? false
-        : {
-            reason: 'Expected',
-            expected,
-            received,
-          };
-    } else if (!isFinite(received)) {
-      return received === expected
-        ? false
-        : {
-            reason: 'Expected',
-            expected,
-            received,
-          };
-    } else if (Math.abs(received - expected) <= calculatePrecision(precision)) {
-      return false;
-    } else {
-      return {
-        reason: 'Expected',
-        expected,
-        received,
-        diff: Math.abs(received - expected),
-      };
-    }
-  } else if (
+  if (
     (typeof received === 'string' && typeof expected === 'string') ||
     (typeof received === 'boolean' && typeof expected === 'boolean')
-  ) {
-    // The received types are not numbers, but they have the same type
+  )
+    return cmpEqual(received, expected);
 
-    if (received === expected) {
-      return false;
-    } else {
-      return {
-        reason: `The ${typeof expected}s do not match`,
-        expected,
-        received,
-      };
-    }
-  } else if (isArray(received) && isArray(expected)) {
-    // Received and expected are arrays
-    const receivedLength = (received as ArrayType).length;
-    const expectedLength = (expected as ArrayType).length;
-    if (receivedLength !== expectedLength) {
-      return {
-        reason: 'The arrays length does not match',
-        expected: expectedLength,
-        received: receivedLength,
-      };
-    }
-    for (let i = 0; i < receivedLength; i++) {
-      const error = recursiveCheck(
-        (received as ArrayType)[i],
-        (expected as ArrayType)[i],
-        precision,
-        strict,
-      );
-      if (error) {
-        return { ...error, index: i };
-      }
-    }
-    return false;
-  } else if (expected === undefined && received === undefined) {
-    /* Received and expected are either
-     * 1) both explicitly set as undefined
-     * 2) undefined properties of an object, where the received value may be implicitly undefined
-     */
+  // Received and expected are arrays
+  if (isArray(received) && isArray(expected))
+    return cmpArray(received as any[], expected as any[], precision, strict);
 
-    return false;
-  } else if (expected === null && received === null) {
-    // Received and expected are null
+  /* Received and expected are either
+   * 1) both explicitly set as undefined
+   * 2) undefined properties of an object, where the received value may be implicitly undefined
+   */
+  if (expected === undefined && received === undefined) return false;
 
-    return false;
-  } else if (
+  // Received and expected are null
+  if (expected === null && received === null) return false;
+
+  // Received and expected are objects
+  if (
     expected !== null &&
     typeof expected === 'object' &&
     !Array.isArray(received) &&
     received !== null &&
     typeof received === 'object' &&
     !Array.isArray(expected)
-  ) {
-    // Received and expected are objects
+  )
+    return cmpObject(received, expected, precision, strict);
 
-    const sorter = (a: string, b: string) => a.localeCompare(b);
-    const receivedKeys = Object.keys(received).sort(sorter);
-    const expectedKeys = Object.keys(expected).sort(sorter);
-    const sameLength = !strict || receivedKeys.length === expectedKeys.length;
-    if (
-      !sameLength ||
-      expectedKeys.some(
-        (e) => !Object.prototype.hasOwnProperty.call(received, e),
-      )
-    ) {
-      return {
-        reason: 'The objects do not have similar keys',
-        expected: expectedKeys,
-        received: receivedKeys,
-      };
-    }
-    for (const prop in expected) {
-      const propError = recursiveCheck(
-        (received as IterableObject)[prop],
-        (expected as IterableObject)[prop],
-        precision,
-        strict,
-      );
-      if (propError) {
-        return { ...propError, key: prop };
-      }
-    }
-    return false;
-  } else {
-    // Error for all other types
-    return {
-      reason: 'The current data type is not supported or they do not match',
-      expected: typeof expected,
-      received: typeof received,
-    };
-  }
+  // Error for all other types
+  return {
+    reason: 'The current data type is not supported or they do not match',
+    expected: typeof expected,
+    received: typeof received,
+  };
 }
 
 type ArrayType = Float32Array | Float64Array | Array<Iterable>;
