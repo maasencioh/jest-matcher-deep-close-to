@@ -151,7 +151,12 @@ export function recursiveCheck(
     typeof received === 'object' &&
     !Array.isArray(expected)
   ) {
-    return cmpObject(received, expected, precision, strict);
+    return cmpObject(
+      received as Record<string, unknown>,
+      expected as Record<string, unknown>,
+      precision,
+      strict,
+    );
   }
 
   // Error for all other types
