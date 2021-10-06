@@ -1,4 +1,4 @@
-import type { Iterable, Error, IterableObject } from './types';
+import type { Error, IterableObject } from './types';
 import { calculatePrecision } from './utils';
 
 type CmpResult = false | Error;
@@ -8,16 +8,19 @@ function cmpNumber(
   expected: number,
   precision: number,
 ): CmpResult {
-  if (isNaN(received))
+  if (isNaN(received)) {
     return isNaN(expected) ? false : { reason: 'Expected', expected, received };
+  }
 
-  if (!isFinite(received))
+  if (!isFinite(received)) {
     return received === expected
       ? false
       : { reason: 'Expected', expected, received };
+  }
 
-  if (Math.abs(received - expected) <= calculatePrecision(precision))
+  if (Math.abs(received - expected) <= calculatePrecision(precision)) {
     return false;
+  }
 
   return {
     reason: 'Expected',
@@ -38,19 +41,20 @@ function cmpEqual<T>(received: T, expected: T): CmpResult {
 }
 
 function cmpArray(
-  received: any[],
-  expected: any[],
+  received: unknown[],
+  expected: unknown[],
   precision: number,
   strict: boolean,
 ): CmpResult {
   const receivedLength = received.length;
   const expectedLength = expected.length;
-  if (receivedLength !== expectedLength)
+  if (receivedLength !== expectedLength) {
     return {
       reason: 'The arrays length does not match',
       expected: expectedLength,
       received: receivedLength,
     };
+  }
 
   for (let i = 0; i < receivedLength; i++) {
     const error = recursiveCheck(received[i], expected[i], precision, strict);
@@ -63,8 +67,8 @@ function cmpArray(
 }
 
 function cmpObject(
-  received: {},
-  expected: {},
+  received: Record<string, unknown>,
+  expected: Record<string, unknown>,
   precision: number,
   strict: boolean,
 ): CmpResult {
@@ -78,12 +82,13 @@ function cmpObject(
   if (
     !sameLength ||
     expectedKeys.some((e) => !Object.prototype.hasOwnProperty.call(received, e))
-  )
+  ) {
     return {
       reason: 'The objects do not have similar keys',
       expected: expectedKeys,
       received: receivedKeys,
     };
+  }
 
   for (const prop in expected) {
     const propError = recursiveCheck(
@@ -106,24 +111,27 @@ function cmpObject(
  * @return {boolean|{reason, expected, received}}
  */
 export function recursiveCheck(
-  received: Iterable,
-  expected: Iterable,
+  received: unknown,
+  expected: unknown,
   precision: number,
   strict = true,
 ): false | Error {
   // Received and expected are numbers
-  if (typeof received === 'number' && typeof expected === 'number')
+  if (typeof received === 'number' && typeof expected === 'number') {
     return cmpNumber(received, expected, precision);
+  }
 
   if (
     (typeof received === 'string' && typeof expected === 'string') ||
     (typeof received === 'boolean' && typeof expected === 'boolean')
-  )
+  ) {
     return cmpEqual(received, expected);
+  }
 
   // Received and expected are arrays
-  if (isArray(received) && isArray(expected))
-    return cmpArray(received as any[], expected as any[], precision, strict);
+  if (isArray(received) && isArray(expected)) {
+    return cmpArray(received, expected, precision, strict);
+  }
 
   /* Received and expected are either
    * 1) both explicitly set as undefined
@@ -142,8 +150,9 @@ export function recursiveCheck(
     received !== null &&
     typeof received === 'object' &&
     !Array.isArray(expected)
-  )
+  ) {
     return cmpObject(received, expected, precision, strict);
+  }
 
   // Error for all other types
   return {
@@ -153,8 +162,7 @@ export function recursiveCheck(
   };
 }
 
-type ArrayType = Float32Array | Float64Array | Array<Iterable>;
-function isArray(value: Iterable): boolean {
+function isArray(value: unknown): value is unknown[] {
   return (
     Array.isArray(value) ||
     value instanceof Float32Array ||
