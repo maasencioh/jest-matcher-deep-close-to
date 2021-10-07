@@ -1,5 +1,13 @@
 # Changelog
 
+### [3.0.1](https://www.github.com/maasencioh/jest-matcher-deep-close-to/compare/v3.0.0...v3.0.1) (2021-10-07)
+
+
+### Bug Fixes
+
+* print correct diff in error message ([896ccad](https://www.github.com/maasencioh/jest-matcher-deep-close-to/commit/896ccad4fedf51e63beef420410005f950747d69))
+* **typings:** include Jest extensions from lib's entrypoint ([9b76880](https://www.github.com/maasencioh/jest-matcher-deep-close-to/commit/9b768809dbee9fbd7986e1ea58078a32da1fb41a))
+
 ## [3.0.0](https://www.github.com/maasencioh/jest-matcher-deep-close-to/compare/v2.0.1...v3.0.0) (2021-09-28)
 
 
