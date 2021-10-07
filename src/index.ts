@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./jest.d.ts" />
+
 import { recursiveCheck } from './recursiveCheck';
 import type { Iterable, MatcherResult } from './types';
 import { printResponse } from './utils';
