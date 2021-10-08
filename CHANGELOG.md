@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.2](https://www.github.com/maasencioh/jest-matcher-deep-close-to/compare/v3.0.1...v3.0.2) (2021-10-08)
+
+
+### Bug Fixes
+
+* **package:** run prepublish script in sequence ([#34](https://www.github.com/maasencioh/jest-matcher-deep-close-to/issues/34)) ([77f1dbf](https://www.github.com/maasencioh/jest-matcher-deep-close-to/commit/77f1dbf97ee3603b6f4f9c2a44d1999f55c45fe3))
+
 ### [3.0.1](https://www.github.com/maasencioh/jest-matcher-deep-close-to/compare/v3.0.0...v3.0.1) (2021-10-07)
 
 
