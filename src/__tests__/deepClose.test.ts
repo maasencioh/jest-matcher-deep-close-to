@@ -164,4 +164,17 @@ describe('fails', () => {
     expect(new Float64Array([1, 1])).not.toBeDeepCloseTo([1, 2]);
     expect([1, 1]).not.toBeDeepCloseTo(new Float32Array([1, 2]));
   });
+
+  it('typed objects', () => {
+    interface Point {
+      x: number;
+      y: number;
+    }
+
+    const value: Point = { x: 1.4999, y: 3.00001 };
+    const expected: Point = { x: 1.5, y: 3 };
+
+    expect(value).toBeDeepCloseTo(expected);
+  });
+
 });
