@@ -175,6 +175,7 @@ describe('fails', () => {
     const expected: Point = { x: 1.5, y: 3 };
 
     expect(value).toBeDeepCloseTo(expected);
+    expect(value).toBeDeepCloseTo({ x: 1.5, y: 3 });
   });
 
 });
