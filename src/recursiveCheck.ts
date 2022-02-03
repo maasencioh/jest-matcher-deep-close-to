@@ -40,6 +40,18 @@ function cmpEqual<T>(received: T, expected: T): CmpResult {
   };
 }
 
+function cmpFunctions(received: Function, expected: Function): CmpResult {
+  if (received !== expected) {
+    return {
+      reason: 'The functions do not match',
+      expected: expected,
+      received: received
+    }
+  }
+
+  return false
+}
+
 function cmpArray(
   received: unknown[],
   expected: unknown[],
@@ -116,6 +128,11 @@ export function recursiveCheck(
   precision: number,
   strict = true,
 ): false | Error {
+  // Received and expected are numbers
+  if (typeof received === 'function' && typeof expected === 'function') {
+    return cmpFunctions(received, expected)
+  }
+
   // Received and expected are numbers
   if (typeof received === 'number' && typeof expected === 'number') {
     return cmpNumber(received, expected, precision);
