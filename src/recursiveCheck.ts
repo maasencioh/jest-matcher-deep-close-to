@@ -40,7 +40,8 @@ function cmpEqual<T>(received: T, expected: T): CmpResult {
   };
 }
 
-function cmpFunctions(received: (...args: any[]) => any, expected: (...args: any[]) => any): CmpResult {
+// eslint-disable-next-line @typescript-eslint/ban-types
+function cmpFunctions(received: Function, expected: Function): CmpResult {
   if (received !== expected) {
     return {
       reason: 'The functions do not match',
@@ -130,7 +131,10 @@ export function recursiveCheck(
 ): false | Error {
   // Received and expected are functions
   if (typeof received === 'function' && typeof expected === 'function') {
-    return cmpFunctions(received as (...args: any[]) => any, expected as (...args: any[]) => any);
+    return cmpFunctions(
+      received as (...args: any[]) => any,
+      expected as (...args: any[]) => any,
+    );
   }
 
   // Received and expected are numbers
