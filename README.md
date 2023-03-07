@@ -13,7 +13,7 @@ Extend jest to assert arrays and objects with approximate values.
 ## Usage
 
 ```js
-import {toBeDeepCloseTo,toMatchCloseTo} from 'jest-matcher-deep-close-to';
+import { toBeDeepCloseTo,toMatchCloseTo } from 'jest-matcher-deep-close-to';
 expect.extend({toBeDeepCloseTo, toMatchCloseTo});
 
 describe('test myModule', () => {
