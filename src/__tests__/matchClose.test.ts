@@ -131,6 +131,18 @@ describe('toMatchCloseTo', () => {
     expect({ x: 1.4999, y: NaN, z: 100 }).toMatchCloseTo({ x: 1.5, z: 100 }, 3);
   });
 
+  it('typed objects', () => {
+    interface Point {
+      x: number;
+      y: number;
+    }
+
+    const value: Point = { x: 1.4999, y: 3.00001 };
+    const expected: Point = { x: 1.5, y: 3 };
+
+    expect(value).toMatchCloseTo(expected);
+  });
+
   it('explicit/implicit undefined', () => {
     expect({ x: 1.4999, y: undefined, z: 100 }).toMatchCloseTo(
       { y: undefined, z: 100 },
