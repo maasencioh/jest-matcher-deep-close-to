@@ -40,6 +40,19 @@ function cmpEqual<T>(received: T, expected: T): CmpResult {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+function cmpFunctions(received: Function, expected: Function): CmpResult {
+  if (received !== expected) {
+    return {
+      reason: 'The functions do not match',
+      expected: expected,
+      received: received,
+    };
+  }
+
+  return false;
+}
+
 function cmpArray(
   received: unknown[],
   expected: unknown[],
@@ -116,6 +129,14 @@ export function recursiveCheck(
   precision: number,
   strict = true,
 ): false | Error {
+  // Received and expected are functions
+  if (typeof received === 'function' && typeof expected === 'function') {
+    return cmpFunctions(
+      received as (...args: any[]) => any,
+      expected as (...args: any[]) => any,
+    );
+  }
+
   // Received and expected are numbers
   if (typeof received === 'number' && typeof expected === 'number') {
     return cmpNumber(received, expected, precision);
