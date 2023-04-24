@@ -14,7 +14,7 @@ declare namespace jest {
     | boolean;
 
   interface Matchers<R> {
-    toBeDeepCloseTo: (expected: Iterable, decimals?: number) => R;
-    toMatchCloseTo: (expected: Iterable, decimals?: number) => R;
+    toBeDeepCloseTo: (expected: Iterable, decimals = 2) => R;
+    toMatchCloseTo: (expected: Iterable, decimals = 2) => R;
   }
 }
